@@ -1,3 +1,3 @@
 # Udemy-WebDeveloperBootcamp
 My scratchpad for Web Developer Bootcamp. 
-Practicing git hub usage
+Practicing git hub.
