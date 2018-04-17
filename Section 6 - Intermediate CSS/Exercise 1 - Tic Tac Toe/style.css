@@ -1,0 +1,23 @@
+body {
+	text-align: center;
+}
+
+div {
+	display: inline-block;
+}
+
+td {
+	/*padding: 50px;*/
+	width: 100px;
+	height: 100px;
+}
+
+tr td:nth-of-type(2) {
+	border-left: 2px solid; 
+	border-right: 2px solid;
+}
+
+tr:nth-of-type(2) td {
+	border-top: 2px solid;
+	border-bottom: 2px solid;
+}
