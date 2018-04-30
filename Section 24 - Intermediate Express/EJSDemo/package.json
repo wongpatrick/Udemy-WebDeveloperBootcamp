@@ -1,0 +1,15 @@
+{
+  "name": "ejs-demo",
+  "version": "1.0.0",
+  "description": "Coding along Colt Steele",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Patrick Wong",
+  "license": "ISC",
+  "dependencies": {
+    "ejs": "^2.5.9",
+    "express": "^4.16.3"
+  }
+}
