@@ -2,7 +2,8 @@ var express = require("express"),
     app = express(),
     bodyParser = require("body-parser"),
     mongoose = require("mongoose"),
-    methodOverride = require("method-override");
+    methodOverride = require("method-override"),
+    expressSanitizer = require("express-sanitizer");
     
 // APP config
 mongoose.connect("mongodb://localhost/restful_blog_app");
@@ -10,6 +11,7 @@ app.set("view engine", "ejs");
 app.use(express.static("public"));
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(methodOverride("_method"));
+app.use(expressSanitizer());
 
 // Mongoose/model config
 var blogSchema = new mongoose.Schema({
@@ -21,11 +23,6 @@ var blogSchema = new mongoose.Schema({
 
 var Blog = mongoose.model("Blog", blogSchema);
 
-/*Blog.create({
-    title: "Test Blog",
-    image: "https://images.unsplash.com/photo-1522198428577-adf2d374b05b?ixlib=rb-0.3.5&ixid=eyJhcHBfaWQiOjEyMDd9&s=c8c7a9980900ca8adf70b1d9ad7487a4&auto=format&fit=crop&w=1350&q=80",
-    body: "Hello this is a blog post!"
-});*/
 // RESTFUL Routes
 
 // Landing
@@ -44,11 +41,14 @@ app.get("/blogs", function(req,res){
     });
 });
 
+// New Route
 app.get("/blogs/new", function(req,res){
     res.render("new");
 })
 
+// CREATE ROUTE
 app.post("/blogs", function(req,res){
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.create(req.body.blog, function(err, newBlog){
         if (err) {
             res.render("new");
@@ -81,6 +81,7 @@ app.get("/blogs/:id/edit", function(req,res){
 });
 
 app.put("/blogs/:id", function(req,res){
+    req.body.blog.body = req.sanitize(req.body.blog.body);
     Blog.findByIdAndUpdate(req.params.id, req.body.blog, function(err,updatedBlog){
         if (err) {
             res.redirect("/blogs");
@@ -89,6 +90,18 @@ app.put("/blogs/:id", function(req,res){
         }
     })
 })
+
+// Delete route
+app.delete("/blogs/:id", function(req,res){
+    //destroy blog
+    Blog.findByIdAndRemove(req.params.id, function(err){
+        if (err) {
+            res.redirect("/blogs");
+        } else {
+            res.redirect("/blogs");
+        }
+    })
+});
 
 app.listen(process.env.PORT, process.env.IP, function(){
     console.log("SERVER IS RUNNING!");
